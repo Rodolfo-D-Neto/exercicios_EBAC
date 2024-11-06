@@ -1,42 +1,48 @@
-            #language: pt
+#language: pt
+Funcionalidade: Configuração e Adição de Produtos ao Carrinho
 
-            Funcionalidade: Configurar produto
-            Como cliente da EBAC-SHOP
-            quero configurar meu produto de acordo com meu tamanho e gosto
-            E escolher a quantidade
-            Para depois inserir no carrinho
+cenario: Campos Obrigatórios
 
-            Cenário: Seleções de cor, tamanho e quantidade devem ser obrigatórios
-            Dado que eu estou na página de um produto
-            quando eu seleciono a cor "Azul"
-            E seleciono o tamanho "M"
-            E seleciono a quantaidade "2"
-            Então o produto deve ser configurado com as opções selecionadas
+Dado que eu esteja na página do produto
+Quando eu tentar adicionar o produto ao carrinho sem selecionar nenhuma opção
+Então o sistema deve exibir a mensagem de erro "Por favor, selecione todas as opções necessárias"
 
-            Cenário:Limitação de quantidade
-            Dado que eu estou na página de um produto
-            Quando eu tento adicionar mais de 10 unidades ao carrinho
-            Então o sistema deve exibir uma mensagem de erro indicando o limite
+cenario: Limite de Quantidade
 
-            Cenário outline: Configuração com diferentes opções
-            Dado que eu estou na página de um produto
-            Quando eu seleciono a cor "<cor>"
-            E seleciono o tamanho "<tamanho>"
-            E seleciono a quantidade "<quantidade>"
-            Então o produto deve ser configurado com as opções selecionadas
+Dado que eu esteja na página do produto
+Quando eu tentar adicionar mais de 10 unidades ao carrinho
+Então o sistema deve exibir a mensagem de erro "A quantidade máxima por produto é 10"
 
-            | cor      | tamanho   | quantidade   |
-            | -------- | --------- | ------------ |
-            | Vermelho | P         | 1            |
-            | Preto    | G         | 5            |
+cenario: Opção Indisponível
 
-            Funcionalidade: Finalizar Compra
+Dado que a cor "Azul" não esteja disponível no tamanho "P"
+Quando eu selecionar a cor "Azul" e o tamanho "P"
+Então o sistema deve exibir a mensagem de erro "A opção selecionada não está disponível"
 
-             Como um cliente da EBAC-SHOP
-             Quero finalizar minha compra
-             Para que possa receber meus produtos
+cenario: Adicionar Produto ao Carrinho
 
-             Cenário: Limpar carrinho
-             Dado que eu tenho produtos no carrinho
-             Quando eu clico no botão "Limpar"
-             Então o carrinho deve estar vazio
+Dado que eu configure um produto com as opções "Azul", "M" e "2"
+Quando eu clicar em "Adicionar ao Carrinho"
+Então o produto configurado deve ser adicionado ao carrinho
+
+cenario : Configuração com Diferentes Opções
+
+Dado que eu esteja na página do produto
+Quando eu selecionar a cor "<cor>", tamanho "<tamanho>" e quantidade "<quantidade>"
+Então o produto deve ser configurado com as opções selecionadas
+
+cor     |	tamanho|	quantidade
+Vermelho|	P      |	1
+Preto   |	G      |	5
+
+cenario: Quantidade Negativa
+
+Dado que eu esteja na página do produto
+Quando eu tentar adicionar uma quantidade negativa ao carrinho
+Então o sistema deve exibir a mensagem de erro "A quantidade deve ser positiva"
+
+Cenário: Limpar carrinho
+
+Dado que eu tenho produtos no carrinho
+Quando eu clico no botão "Limpar"
+Então o carrinho deve estar vazio.
